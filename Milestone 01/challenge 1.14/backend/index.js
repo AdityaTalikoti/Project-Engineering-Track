@@ -15,12 +15,19 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // Database setup
 const db = new Database('recipes.db');
 db.exec(`
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+  );
+
   CREATE TABLE IF NOT EXISTS recipes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     ingredients TEXT NOT NULL,
     instructions TEXT NOT NULL,
-    source_url TEXT
+    source_url TEXT,
+    category_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
   )
 `);
 
