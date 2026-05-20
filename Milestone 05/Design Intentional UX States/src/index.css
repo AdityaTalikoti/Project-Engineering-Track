@@ -37,5 +37,57 @@ body {
 
 #root { min-height: 100vh; }
 
-button { font-family: var(--font); cursor: pointer; }
-input  { font-family: var(--font); }
+button { font-family: var(--font); cursor: pointer; border: none; outline: none; }
+input  { font-family: var(--font); outline: none; }
+
+/* Modern animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbar for modern feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Interactive elements */
+.filter-tab {
+  transition: all 0.2s ease;
+}
+.filter-tab:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.filter-tab.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.table-row {
+  transition: all 0.15s ease;
+}
+.table-row:hover {
+  background: var(--surface-2) !important;
+}
+
+/* Custom shadow glow */
+.glow-accent {
+  box-shadow: 0 0 15px var(--accent-glow);
+}
