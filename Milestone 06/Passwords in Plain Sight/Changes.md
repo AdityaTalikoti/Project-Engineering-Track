@@ -77,8 +77,52 @@ Storing passwords in plain text is a critical security vulnerability.
 - **Select exclusion (`select: false`)**: Missing on the `password` field (which means database queries return the password in search results by default unless explicitly excluded).
 - **Password validation rules**: Missing (no minimum length or complexity checks).
 
+## What I Fixed
+
+We successfully applied two key security remediations in the authentication flow:
+
+### 1. Hash the Password Before Storing (Signup)
+We integrated `bcryptjs` to encrypt passwords on user registration. We updated `backend/controllers/authController.js` to hash incoming passwords with a salt factor of 10 prior to database save.
+
+**Before:**
+```javascript
+// Password stored directly — no hashing
+const user = await User.create({
+  email,
+  password, // plain text stored here
+})
+```
+
+**After:**
+```javascript
+// Hash the password before saving
+const saltRounds = 10
+const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+const user = await User.create({
+  email,
+  password: hashedPassword,
+})
+```
+
 ---
 
-## What I Fixed (Planned)
+### 2. Compare Safely During Login
+We replaced the plain-text string inequality comparison in the login controller with a safe asynchronous comparison using `bcrypt.compare()`.
 
-*(This section will show the code changes once they are applied.)*
+**Before:**
+```javascript
+// Direct string comparison — unsafe
+if (user.password !== password) {
+  return res.status(401).json({ message: 'Invalid credentials' })
+}
+```
+
+**After:**
+```javascript
+// Compare safely during login
+const isMatch = await bcrypt.compare(password, user.password)
+if (!isMatch) {
+  return res.status(401).json({ message: 'Invalid credentials' })
+}
+```
