@@ -124,3 +124,36 @@ src/
 ├── index.css
 └── main.jsx
 ```
+
+## Folder Rules
+- `src/features/`: Contains all domain-specific logic, components, services, and hooks isolated by feature.
+- `src/components/`: Contains shared, generic, and domain-agnostic UI components used across multiple features.
+- `src/hooks/`: Contains reusable custom React hooks that provide generic, non-domain functionality.
+- `src/utils/`: Contains pure helper functions, formatting utilities, and constants shared across the app.
+- `src/services/`: Contains global network clients and shared API communications services.
+
+## The Placing-Things Decision Tree
+To decide where to place a new file, follow this decision tree:
+1. **Is the file specific to a particular business domain/feature (e.g., Auth, Cart, Products)?**
+   - **Yes** ➔ Place it in `src/features/<feature_name>/` (e.g. `src/features/auth/`).
+   - **No** ➔ Proceed to Step 2.
+2. **Is it a React component?**
+   - **Yes** ➔ Place it in `src/components/`.
+   - **No** ➔ Proceed to Step 3.
+3. **Is it a custom React hook?**
+   - **Yes** ➔ Place it in `src/hooks/`.
+   - **No** ➔ Proceed to Step 4.
+4. **Is it a network client or external service configuration?**
+   - **Yes** ➔ Place it in `src/services/`.
+   - **No** ➔ Place it in `src/utils/`.
+
+## Adding a New Feature
+Follow this 3-step checklist to add a new feature to the codebase:
+1. **Create Feature Folder**: Create a new subdirectory inside `src/features/<new_feature_name>/`.
+2. **Implement Feature Files**: Add feature-specific components, custom hooks, and services directly inside that subdirectory, using relative imports (e.g. `./reviewsService`) for siblings.
+3. **Integrate Feature**: Connect the new feature's entry components to routing or root states in `src/App.jsx`.
+
+## Before vs. After
+- **Before**: The flat `src/` directory forced developers to scan dozens of unrelated files to find a single piece of business logic, raising cognitive load and introducing a high risk of dependency spaghetti.
+- **After**: The feature-based architecture segregates domain-specific features cleanly, making it trivial to locate, maintain, or delete a feature while keeping the shared boundaries well-defined.
+
