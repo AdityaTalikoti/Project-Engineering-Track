@@ -47,3 +47,33 @@ Prior to applying any fixes, the following behaviors were observed when interact
 - **Location:** [Navbar.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/components/Navbar.jsx)
 - **Description:** The `Navbar` component does not reference or call the `useAuth` hook. The navigation links and login button are statically rendered without taking the authentication state into account.
 - **Impact:** The Navbar is unable to toggle between logged-in and logged-out views (showing user email/name and Logout vs. Login links).
+
+---
+
+## Fixes Applied
+
+### Fix 1: Wired Up Context Provider
+- **Changes in:** [main.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/main.jsx)
+- **Resolution:** Imported `AuthProvider` from the context directory and wrapped the `<App />` component within `<AuthProvider>` under the `<BrowserRouter>`. This exposes the user, token, authentication status, and actions to the entire page hierarchy, resolving the context unavailability issue.
+
+### Fix 2: Implemented Storage & Token Persistence
+- **Changes in:** [AuthContext.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/context/AuthContext.jsx)
+- **Resolution:** 
+  1. Updated the `login` function to store `authToken` (token string) and `authUser` (serialized JSON object) in `localStorage` when credentials are valid.
+  2. Updated the `logout` function to remove `authToken` and `authUser` from `localStorage`.
+  3. Added a `useEffect` hook executing on mount to retrieve stored credentials from `localStorage`. If a valid token and user are found, the state is automatically populated, preserving authentication status across page reloads.
+
+### Fix 3: Created Protected Route & Guarded Routing Configuration
+- **Changes in:**
+  - [New Component] [ProtectedRoute.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/components/ProtectedRoute.jsx)
+  - [App.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/App.jsx)
+- **Resolution:**
+  1. Developed a `ProtectedRoute` component that calls `useAuth()`. If `isAuthenticated` is true, it renders its child components; if false, it redirects to `/login` using `<Navigate to="/login" replace />` to prevent the user from using the back button to navigate to guarded pages.
+  2. Modified the router configuration in `App.jsx` to wrap the private page elements (`/dashboard`, `/settings`, `/profile`) inside `<ProtectedRoute>`. Public routes like `/login` and `/` remain open.
+
+### Fix 4: Synchronized Navbar with Auth State
+- **Changes in:** [Navbar.jsx](file:///c:/Project-Engineering-main/Milestone%2005/Secure%20the%20App_%20Protected%20Routes%20&%20Auth%20Flow/src/components/Navbar.jsx)
+- **Resolution:** Imported `useAuth` and `useNavigate`. Retrieved the `user`, `isAuthenticated`, and `logout` function from context. The Navbar now dynamically renders:
+  - If `isAuthenticated` is true: Displays a link to `/profile`, a personalized greeting message (`Hi, {user.name}`), and a "Logout" button which triggers `logout()` and redirects to `/login`.
+  - If `isAuthenticated` is false: Displays the default "Login" button.
+
