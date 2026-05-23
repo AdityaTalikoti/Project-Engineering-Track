@@ -130,12 +130,52 @@ The completed access model table filled in with findings on what was currently a
 | Change a user's role | `PUT /api/users/:id/role` | `admin only` | Yes (everyone) |
 | View own profile | `GET /api/users/me` | `user`, `manager`, `admin` | Yes (everyone) |
 
+## 4. What I Fixed
+For each modified route file, here is the before and after middleware chain:
+
+### 1. `routes/userRoutes.js`
+- **Route:** `GET /` (View all users)
+  - **Before:** `protect, getAllUsers`
+  - **After:** `protect, requireRole('admin'), getAllUsers`
+- **Route:** `PUT /:id/role` (Change user role)
+  - **Before:** `protect, updateUserRole`
+  - **After:** `protect, requireRole('admin'), updateUserRole`
+
+### 2. `routes/expenseRoutes.js`
+- **Route:** `GET /` (View all expenses)
+  - **Before:** `protect, getAllExpenses`
+  - **After:** `protect, requireRole('manager', 'admin'), getAllExpenses`
+- **Route:** `PUT /:id/approve` (Approve expense)
+  - **Before:** `protect, approveExpense`
+  - **After:** `protect, requireRole('manager', 'admin'), approveExpense`
+- **Route:** `PUT /:id/reject` (Reject expense)
+  - **Before:** `protect, rejectExpense`
+  - **After:** `protect, requireRole('manager', 'admin'), rejectExpense`
+- **Route:** `DELETE /:id` (Delete expense)
+  - **Before:** `protect, deleteExpense`
+  - **After:** `protect, requireRole('admin'), deleteExpense`
+
 ---
 
-## 4. What I Fixed
-*(TBD - to be filled in after applying fixes)*
+### Additional Modifications
+- **`middleware/roleMiddleware.js` (NEW):** Created the role-checking middleware function `requireRole(...allowedRoles)`.
+- **`middleware/authMiddleware.js` (MODIFY):** Added assignment of `req.user.userId = decoded.userId` to pass the decoded user identifier to the request context.
+- **`controllers/authController.js` (MODIFY):** Included `role` in the JWT signing payload inside both `login` and `signup` functions.
+- **`controllers/expenseController.js` (MODIFY):** Implemented ownership checks on `updateExpense` and `deleteExpense` endpoints. Added checking of `isOwner` and `isPrivileged`, and handled error responses appropriately.
 
 ---
 
 ## 5. Verification Results
-*(TBD - to be filled in after executing scenario tests)*
+Below is the table containing the results of the eight verification scenarios tested:
+
+| Scenario | Token Used (Role) | Expected Status | Actual Status | Screenshot Filename |
+| --- | --- | --- | --- | --- |
+| 1. Regular user tries `PUT /api/expenses/:id/approve` | `user` | `403` | `403` | `scenario_1_user_approve_403.png` |
+| 2. Regular user tries `DELETE /api/expenses/:id` (any expense) | `user` | `403` | `403` | `scenario_2_user_delete_403.png` |
+| 3. Regular user tries `PUT /api/users/:id/role` | `user` | `403` | `403` | `scenario_3_user_change_role_403.png` |
+| 4. Regular user tries to edit another user's expense | `user` | `403` | `403` | `scenario_4_user_edit_other_403.png` |
+| 5. Manager approves an expense | `manager` | `200` | `200` | `scenario_5_manager_approve_200.png` |
+| 6. Manager tries to change a user's role | `manager` | `403` | `403` | `scenario_6_manager_change_role_403.png` |
+| 7. Admin deletes an expense | `admin` | `200` | `200` | `scenario_7_admin_delete_200.png` |
+| 8. Admin changes a user's role | `admin` | `200` | `200` | `scenario_8_admin_change_role_200.png` |
+
