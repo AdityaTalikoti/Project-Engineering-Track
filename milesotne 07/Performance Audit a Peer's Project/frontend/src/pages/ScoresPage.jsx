@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import ScoreList from '../components/ScoreList';
 import { Trophy, Gamepad2, Info } from 'lucide-react';
@@ -8,23 +8,31 @@ const ScoresPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchScores = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('/api/scores');
+        const res = await axios.get('/api/scores', {
+          signal: controller.signal
+        });
         setScores(res.data);
       } catch (err) {
-        console.error(err);
+        if (!axios.isCancel(err)) {
+          console.error(err);
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchScores();
+    return () => {
+      controller.abort();
+    };
   }, []);
 
-  const handleDelete = (id) => {
+  const handleDelete = useCallback((id) => {
     setScores(prev => prev.filter(s => s.id !== id));
-  };
+  }, []);
 
   return (
     <div className="app-container">
