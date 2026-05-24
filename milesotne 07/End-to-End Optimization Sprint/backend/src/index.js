@@ -34,7 +34,6 @@ app.get('/api/missions', async (req, res) => {
           name: true,
           launchDate: true,
           rocket: true,
-          description: true,
           crew: {
             select: {
               id: true,
@@ -68,7 +67,6 @@ app.get('/api/missions', async (req, res) => {
           name: true,
           launchDate: true,
           rocket: true,
-          description: true,
           crew: {
             select: {
               id: true,
