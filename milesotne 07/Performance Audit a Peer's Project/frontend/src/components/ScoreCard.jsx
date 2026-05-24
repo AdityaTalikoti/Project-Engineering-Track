@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trash2, Calendar, User, Hash } from 'lucide-react';
 
-const ScoreCard = ({ score, onDelete }) => {
+const ScoreCard = React.memo(({ score, onDelete }) => {
   return (
     <div className="score-card">
       <div className="card-header">
