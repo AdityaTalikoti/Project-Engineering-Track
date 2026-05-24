@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { registerLogoutCallback } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -36,6 +37,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
+
+  useEffect(() => {
+    registerLogoutCallback(logout);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, setUser, setToken }}>
