@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import MissionCard from './MissionCard';
 
+const CARD_STYLE = { marginBottom: '0' };
+
 const MissionList = ({ missions, onDelete }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -52,7 +54,7 @@ const MissionList = ({ missions, onDelete }) => {
             key={mission.id} 
             mission={mission} 
             onDelete={onDelete}
-            style={{ marginBottom: '0' }} 
+            style={CARD_STYLE} 
           />
         ))}
       </div>
