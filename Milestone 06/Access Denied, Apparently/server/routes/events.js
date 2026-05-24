@@ -9,8 +9,8 @@ router.use(authMiddleware);
 
 // Broken Flow 3: Returns all events, including those the user is not invited to
 router.get('/', (req, res) => {
-    // FIX in solution: filter events where req.user.id is creator or req.user.email is in invitedEmails
-    res.json(events);
+    const filteredEvents = events.filter(e => e.creatorId === req.user.id || e.invitedEmails.includes(req.user.email));
+    res.json(filteredEvents);
 });
 
 router.post('/', (req, res) => {
