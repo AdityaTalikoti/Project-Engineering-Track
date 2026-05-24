@@ -3,35 +3,48 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
+const decodeToken = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [role, setRole] = useState(localStorage.getItem('role')); // BROKEN PART 3: Storing role in localStorage
 
   useEffect(() => {
-    if(token && role) {
-        setUser({ token, role });
+    if (token) {
+      const decoded = decodeToken(token);
+      if (decoded) {
+        setUser({ id: decoded.userId, role: decoded.role });
+      } else {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
     }
-  }, [token, role]);
+  }, [token]);
 
   const login = (data) => {
     localStorage.setItem('token', data.token);
-    localStorage.setItem('role', data.user.role); // BROKEN PART 3: Storing role in localStorage
     setToken(data.token);
-    setRole(data.user.role);
-    setUser(data.user);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('role');
     setToken(null);
-    setRole(null);
-    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, role, login, logout }}>
+    <AuthContext.Provider value={{ user, token, role: user?.role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
