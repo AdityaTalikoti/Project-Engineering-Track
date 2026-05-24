@@ -52,7 +52,16 @@ router.post('/:id/rsvp', (req, res) => {
     const event = events.find(e => e.id === req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
 
-    // NO check for invitation or duplicate RSVP in starter
+    const isInvited = event.invitedEmails.includes(req.user.email);
+    if (!isInvited) {
+        return res.status(403).json({ message: 'Access denied: You are not invited to this event' });
+    }
+
+    const alreadyRSVPed = event.rsvps.includes(req.user.id);
+    if (alreadyRSVPed) {
+        return res.status(400).json({ message: 'You have already RSVPed' });
+    }
+
     event.rsvps.push(req.user.id);
     res.json({ message: 'RSVP successful', event });
 });
