@@ -7,19 +7,30 @@ const MissionsPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchMissions = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/missions');
+        const response = await axios.get('http://localhost:3001/api/missions', {
+          signal: controller.signal
+        });
         setMissions(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching missions:', error);
-        setLoading(false);
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+        } else {
+          console.error('Error fetching missions:', error);
+          setLoading(false);
+        }
       }
     };
 
     fetchMissions();
-  }); 
+
+    return () => {
+      controller.abort();
+    };
+  }, []); 
 
   const handleDelete = (id) => {
     setMissions(missions.filter(m => m.id !== id));
