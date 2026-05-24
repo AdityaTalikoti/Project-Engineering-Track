@@ -34,12 +34,16 @@ router.get('/:id', (req, res) => {
     const event = events.find(e => e.id === req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
     
-    // In starter, we don't check permissions
-    // We add flags for the frontend (BROKEN Flow 5: these flags might be missing or incorrect in starter if we're not careful, but let's provide them so the UI can be broken by UI logic)
+    const isCreator = event.creatorId === req.user.id;
+    const isInvited = event.invitedEmails.includes(req.user.email);
+    if (!isCreator && !isInvited) {
+        return res.status(403).json({ message: 'Access denied: You are not invited to this event' });
+    }
+    
     res.json({
         ...event,
-        isCreator: event.creatorId === req.user.id,
-        isInvited: event.invitedEmails.includes(req.user.email)
+        isCreator,
+        isInvited
     });
 });
 
