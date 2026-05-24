@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:3001"
+  phases:
+    - duration: 30
+      arrivalRate: 50
+      rampTo: 50
+      name: "Ramp up to 50 users"
+  ensure:
+    - statusCode: 200
+scenarios:
+  - name: "Get paginated space missions"
+    flow:
+      - get:
+          url: "/api/missions?page=1&limit=20"
