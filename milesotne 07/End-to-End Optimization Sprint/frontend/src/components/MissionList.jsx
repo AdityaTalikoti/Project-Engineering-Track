@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import MissionCard from './MissionCard';
 
 const CARD_STYLE = { marginBottom: '0' };
@@ -6,7 +6,7 @@ const CARD_STYLE = { marginBottom: '0' };
 const MissionList = ({ missions, onDelete }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const getFilteredMissions = () => {
+  const filteredMissions = useMemo(() => {
     console.log('--- Expensive filtering running ---');
     let temp = [...missions];
     
@@ -17,9 +17,7 @@ const MissionList = ({ missions, onDelete }) => {
     return temp
       .filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
-  };
-
-  const filteredMissions = getFilteredMissions();
+  }, [missions, searchTerm]);
 
   return (
     <div className="list-wrapper">
