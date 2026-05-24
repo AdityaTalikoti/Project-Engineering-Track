@@ -18,6 +18,13 @@ router.get('/', async (req, res) => {
       const scores = await prisma.score.findMany({
         skip,
         take,
+        select: {
+          id: true,
+          game: true,
+          player: true,
+          score: true,
+          date: true
+        },
         orderBy: { date: 'desc' }
       });
 
@@ -36,6 +43,13 @@ router.get('/', async (req, res) => {
       });
     } else {
       const scores = await prisma.score.findMany({
+        select: {
+          id: true,
+          game: true,
+          player: true,
+          score: true,
+          date: true
+        },
         orderBy: { date: 'desc' }
       });
       return res.json(scores);
