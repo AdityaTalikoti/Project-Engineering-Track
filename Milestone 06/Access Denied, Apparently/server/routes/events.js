@@ -71,7 +71,11 @@ router.delete('/:id', (req, res) => {
     const index = events.findIndex(e => e.id === req.params.id);
     if (index === -1) return res.status(404).json({ message: 'Event not found' });
 
-    // In starter, no check for ownership
+    const event = events[index];
+    if (event.creatorId !== req.user.id) {
+        return res.status(403).json({ message: 'Access denied: You are not the creator of this event' });
+    }
+
     events.splice(index, 1);
     res.json({ message: 'Event deleted' });
 });
