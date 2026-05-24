@@ -16,30 +16,73 @@ app.get('/api/missions', async (req, res) => {
   let queryCount = 0;
 
   try {
-    // 1st Query: Fetch all missions
-    const detailedMissions = await prisma.mission.findMany({
-      select: {
-        id: true,
-        name: true,
-        launchDate: true,
-        rocket: true,
-        description: true,
-        crew: {
-          select: {
-            id: true,
-            name: true,
-            role: true,
-            nationality: true
+    const page = req.query.page ? parseInt(req.query.page) : null;
+    const limit = req.query.limit ? parseInt(req.query.limit) : null;
+
+    if (page && limit) {
+      const skip = (page - 1) * limit;
+      const take = limit;
+
+      const total = await prisma.mission.count();
+      queryCount++;
+
+      const detailedMissions = await prisma.mission.findMany({
+        skip,
+        take,
+        select: {
+          id: true,
+          name: true,
+          launchDate: true,
+          rocket: true,
+          description: true,
+          crew: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+              nationality: true
+            }
           }
         }
-      }
-    });
-    queryCount++;
+      });
+      queryCount++;
 
-    console.log(`Executed ${queryCount} database queries for this request.`);
-    
-    // We send ALL 200 items in one response
-    res.json(detailedMissions);
+      const totalPages = Math.ceil(total / limit);
+      console.log(`Executed ${queryCount} database queries for this request.`);
+
+      return res.json({
+        data: detailedMissions,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      });
+    } else {
+      const detailedMissions = await prisma.mission.findMany({
+        select: {
+          id: true,
+          name: true,
+          launchDate: true,
+          rocket: true,
+          description: true,
+          crew: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+              nationality: true
+            }
+          }
+        }
+      });
+      queryCount++;
+      console.log(`Executed ${queryCount} database queries for this request.`);
+      return res.json(detailedMissions);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch missions' });
