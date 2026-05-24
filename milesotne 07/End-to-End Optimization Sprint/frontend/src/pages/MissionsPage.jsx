@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import MissionList from '../components/MissionList';
 
@@ -32,9 +32,9 @@ const MissionsPage = () => {
     };
   }, []); 
 
-  const handleDelete = (id) => {
-    setMissions(missions.filter(m => m.id !== id));
-  };
+  const handleDelete = useCallback((id) => {
+    setMissions(prev => prev.filter(m => m.id !== id));
+  }, []);
 
   return (
     <div className="container">
