@@ -6,6 +6,8 @@ const CARD_STYLE = { marginBottom: '0' };
 const MissionList = ({ missions, onDelete }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [visibleCount, setVisibleCount] = useState(12);
+
   const filteredMissions = useMemo(() => {
     console.log('--- Expensive filtering running ---');
     let temp = [...missions];
@@ -18,6 +20,8 @@ const MissionList = ({ missions, onDelete }) => {
       .filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .sort((a, b) => new Date(b.launchDate) - new Date(a.launchDate));
   }, [missions, searchTerm]);
+
+  const visibleMissions = filteredMissions.slice(0, visibleCount);
 
   return (
     <div className="list-wrapper">
@@ -47,7 +51,7 @@ const MissionList = ({ missions, onDelete }) => {
       </div>
 
       <div className="mission-grid">
-        {filteredMissions.map(mission => (
+        {visibleMissions.map(mission => (
           <MissionCard 
             key={mission.id} 
             mission={mission} 
@@ -56,6 +60,17 @@ const MissionList = ({ missions, onDelete }) => {
           />
         ))}
       </div>
+
+      {visibleCount < filteredMissions.length && (
+        <div className="load-more-container">
+          <button 
+            onClick={() => setVisibleCount(prev => prev + 12)}
+            className="btn btn-primary"
+          >
+            LOAD MORE MISSIONS
+          </button>
+        </div>
+      )}
     </div>
   );
 };
