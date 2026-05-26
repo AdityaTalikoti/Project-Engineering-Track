@@ -2,6 +2,19 @@
 // NoteVault API — Express Server Entry Point
 
 require("dotenv").config();
+
+// Fail-fast environment variable validation
+function validateEnv() {
+  const required = ["DATABASE_URL", "JWT_SECRET"];
+  const missing = required.filter((key) => !process.env[key]);
+  
+  if (missing.length > 0) {
+    console.error(`❌ CRITICAL CONFIGURATION ERROR: Missing required environment variable(s): ${missing.join(", ")}`);
+    process.exit(1);
+  }
+}
+validateEnv();
+
 const express = require("express");
 const cors = require("cors");
 

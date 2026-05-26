@@ -13,5 +13,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # DATABASE_URL is missing here!
-      # JWT_SECRET is missing here!
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
