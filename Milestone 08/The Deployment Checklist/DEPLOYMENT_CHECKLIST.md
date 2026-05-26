@@ -1,36 +1,38 @@
 # Deployment Checklist
 
 **Application:** LaunchPad
-**Platform:** [Render/Railway/Other]
-**Live URL:** [Insert Link]
-**Checklist completed:** [Date]
-**Engineer:** [Your Name]
+**Platform:** Render
+**Live URL:** https://launchpad-app.onrender.com
+**Checklist completed:** 2026-05-26
+**Engineer:** Aditya Talikoti
 
 ---
 
 | # | Item | Status | Evidence |
 |---|------|--------|----------|
-| 01 | Env variables configured on platform | | |
-| 02 | Build passes locally | | |
-| 03 | Build passes in CI | | |
-| 04 | DB migrations executed | | |
-| 05 | CORS verified | | |
-| 06 | API base URL correct in production | | |
-| 07 | Auth flow tested in production | | |
-| 08 | Health endpoint responding | | |
-| 09 | No secrets in Git | | |
-| 10 | .env.example committed | | |
-| 11 | Node version pinned | | |
-| 12 | Docker image builds locally | | |
+| 01 | Env variables configured on platform | ✅ PASS | screenshots/01-env-vars-platform.png |
+| 02 | Build passes locally | ✅ PASS | screenshots/02-local-build.png |
+| 03 | Build passes in CI | ✅ PASS | screenshots/03-ci-build.png |
+| 04 | DB migrations executed | ✅ PASS | screenshots/04-migration-log.png |
+| 05 | CORS verified | ✅ PASS | screenshots/05-cors-network-tab.png |
+| 06 | API base URL correct in production | ✅ PASS | screenshots/06-api-url.png |
+| 07 | Auth flow tested in production | ✅ PASS | screenshots/07-auth-production.png |
+| 08 | Health endpoint responding | ✅ PASS | `curl -s https://launchpad-app.onrender.com/health` returns `{"status":"ok","timestamp":"2026-05-26T08:50:00.000Z"}` |
+| 09 | No secrets in Git | ✅ PASS | screenshots/09-no-secrets-git.png |
+| 10 | .env.example committed | ✅ PASS | screenshots/10-env-example.png |
+| 11 | Node version pinned | ✅ PASS | screenshots/11-node-version.png |
+| 12 | Docker image builds locally | ⏭️ SKIP | Not using Docker. Deployed directly from GitHub to Render. Platform manages the Node.js environment. |
 
 ---
 
 ## Follow-up Tasks
-<!-- Add one bullet per FAIL item with the specific fix needed -->
-- FAIL 05: CORS origin was development default. Fixed by setting CORS_ORIGIN on platform.
-- FAIL 08: Missing endpoint. Fixed by implementing backend/routes/health.js.
-- FAIL 11: Backend Node version was unpinned. Fixed by adding "engines" to backend/package.json.
+
+- [x] Item 05 FAIL: Update CORS_ORIGIN on Render to match production frontend URL. (Resolved by setting correct CORS headers in Express).
+- [x] Item 08 FAIL: Add GET /health endpoint to Express server before next deploy. (Resolved by implementing route in `backend/index.js`).
+- [x] Item 11 FAIL: Backend Node version was unpinned. (Resolved by adding `engines` field in `backend/package.json`).
+
+---
 
 ## Skip Justifications
-<!-- Add one bullet per SKIP item explaining why it was intentionally omitted -->
-- SKIP 12: Dockerization is listed as an optional learning task.
+
+- Item 12: Not using Docker. Deployed directly from GitHub to Render. Platform manages the Node.js environment.
