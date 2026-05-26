@@ -8,10 +8,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Bug: CORS only allows http://localhost:5173
-// This will block the deployed Vercel frontend from making requests!
+// Fixed CORS to dynamically allow the deployed frontend URL using process.env.CORS_ORIGIN
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true
 }));
 
