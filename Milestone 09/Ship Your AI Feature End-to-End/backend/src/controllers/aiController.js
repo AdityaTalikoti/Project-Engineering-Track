@@ -6,10 +6,9 @@ import { callAI } from '../services/aiService.js'
 
 export async function aiController(req, res) {
   try {
-    // Replace 'text' with your actual input field name
-    const { text } = req.body
+    const { emailText } = req.body
 
-    const result = await callAI(text, req.user.id)
+    const result = await callAI(emailText, req.user.id)
 
     // Detect fallback from aiService
     if (result?.fallback === true) {
@@ -18,8 +17,7 @@ export async function aiController(req, res) {
 
     return res.status(200).json({
       success: true,
-      result,
-      // Add any metadata your frontend needs
+      result
     })
   } catch (err) {
     console.error('[CONTROLLER_ERROR]', { error: err.message, userId: req.user?.id })

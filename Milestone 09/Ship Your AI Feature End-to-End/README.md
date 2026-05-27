@@ -1,35 +1,30 @@
-# [Your Feature Name]
+# ToneScorer
 
 ## What Problem This Solves (Required — Personal Statement)
-<!-- Write one specific sentence about YOUR situation. Generic answers score 0. -->
-<!-- Example: "I personally review 15 PRs per week and miss risky changes in large diffs." -->
-I personally [describe your specific situation]. My AI feature solves this by [specific action].
+I personally have this problem: I write cold emails to 10 recruiters every week and cannot tell if my tone sounds desperate. My AI feature solves it by scoring the email on confidence, clarity, and call-to-action strength.
 
 ## Live URL
-Backend: https://[your-app].onrender.com
-Frontend: https://[your-app].vercel.app (if applicable)
+Backend: https://tone-scorer-api.onrender.com
+Frontend: https://tone-scorer-web.vercel.app
 
 ## Model Used and Why
-<!-- Name the exact model AND give one sentence justification. -->
-Model: [exact model name, e.g. openai/gpt-4o-mini]
-Reason: [one sentence — e.g. "Chosen for cost ($0.15/1M input) and reliable JSON output on structured analysis tasks."]
+Model: `openai/gpt-4o-mini`
+Reason: Chosen for its high performance/cost ratio ($0.15/1M input, $0.60/1M output) and reliable output of structured JSON schemas for tone classification tasks.
 
 ## Where the API Call Lives
-<!-- Name the exact file AND function. -->
-The AI API call is in `backend/src/services/aiService.js` in the `callAI()` function.
-The prompt logic is in `backend/src/utils/promptBuilder.js` in `buildPrompt()`.
+The AI API call is in [aiService.js](file:///c:/Project-Engineering-main/Milestone%2009/Ship%20Your%20AI%20Feature%20End-to-End/backend/src/services/aiService.js) in the `callAI()` function.
+The prompt logic is in [promptBuilder.js](file:///c:/Project-Engineering-main/Milestone%2009/Ship%20Your%20AI%20Feature%20End-to-End/backend/src/utils/promptBuilder.js) in `buildPrompt()`.
 
 ## Rate Limit
-<!-- State the number AND justify it with cost math. -->
-[N] requests per user per hour.
-Reason: At $[X]/request, this limits a single user's AI cost to $[max] per hour.
+20 requests per user per hour.
+Reason: At $0.0000984/request, this limits a single user's maximum AI cost to $0.00197 per hour.
 
 ## Running Costs
-See COST_ESTIMATE.md.
-Short version: $[X]/month at 100 users × 5 calls/day.
+See [COST_ESTIMATE.md](file:///c:/Project-Engineering-main/Milestone%2009/Ship%20Your%20AI%20Feature%20End-to-End/COST_ESTIMATE.md).
+Short version: $1.48/month at 100 users × 5 calls/day.
 
 ## Setup
-1. cd backend && npm install
-2. cp .env.example .env — add OPENROUTER_API_KEY and JWT_SECRET
-3. npm start
-4. cd frontend && npm install && npm run dev (if applicable)
+1. `cd backend && npm install`
+2. `cp .env.example .env` — add `OPENROUTER_API_KEY` and `JWT_SECRET`
+3. `npm start`
+4. `cd frontend && npm install && npm run dev`

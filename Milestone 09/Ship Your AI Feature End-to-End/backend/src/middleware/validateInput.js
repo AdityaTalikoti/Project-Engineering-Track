@@ -1,36 +1,35 @@
 // backend/src/middleware/validateInput.js
 // CONSTRAINT 5: Input validation — length check + at least one content check.
-// Adjust field name, max length, and content check for your specific feature.
 
-const MAX_INPUT_LENGTH = 3000  // Adjust based on your token budget
+const MAX_INPUT_LENGTH = 3000
 
 export function validateAIInput(req, res, next) {
-  // Replace 'text' with your actual input field name
-  const { text } = req.body
+  const { emailText } = req.body
 
-  // Check 1: Content existence
-  if (!text || typeof text !== 'string' || text.trim().length === 0) {
+  // Check 1: Content existence and type
+  if (!emailText || typeof emailText !== 'string' || emailText.trim().length === 0) {
     return res.status(400).json({
       error: 'input_required',
-      message: 'Input text is required.'  // Update message for your feature
+      message: 'Email text is required.'
     })
   }
 
-  // Check 2: Length guard (cost protection)
-  if (text.length > MAX_INPUT_LENGTH) {
+  // Check 2: Length guard
+  if (emailText.length > MAX_INPUT_LENGTH) {
     return res.status(400).json({
       error: 'input_too_long',
       limit: MAX_INPUT_LENGTH,
-      received: text.length
+      received: emailText.length
     })
   }
 
-  // Check 3: Add your domain-specific content check here
-  // Examples:
-  // - For email scorer: check it looks like an email (contains @ or common email words)
-  // - For PR reviewer: check it contains common diff markers (+, -, @@)
-  // - For interview coach: check minimum length (answer must be at least 100 chars)
-  // if (yourCondition) { return res.status(400).json({ error: '...' }) }
+  // Check 3: Domain-specific check (e.g., minimum length of 15 characters)
+  if (emailText.trim().length < 15) {
+    return res.status(400).json({
+      error: 'input_too_short',
+      message: 'The email content is too short to score. Please enter at least 15 characters.'
+    })
+  }
 
   next()
 }
