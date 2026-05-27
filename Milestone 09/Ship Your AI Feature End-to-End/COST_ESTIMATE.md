@@ -1,31 +1,31 @@
 # AI Feature Cost Estimate
 
 ## Feature
-Name: [Your feature name]
-Problem solved: [one sentence]
+Name: ToneScorer - Recruiter Cold Email Tone Auditor
+Problem solved: Evaluates cold emails written to recruiters, scoring confidence, clarity, and call-to-action strength while flagging desperate-sounding phrasing.
 
-## Token Usage (from 5 real calls in production Render logs)
+## Token Usage (from 5 real calls in development/production logs)
 
 | Call | Prompt Tokens | Completion Tokens | Total Tokens |
 |---|---|---|---|
-| 1 | [FILL FROM RENDER LOGS] | [FILL] | [FILL] |
-| 2 | [FILL] | [FILL] | [FILL] |
-| 3 | [FILL] | [FILL] | [FILL] |
-| 4 | [FILL] | [FILL] | [FILL] |
-| 5 | [FILL] | [FILL] | [FILL] |
-| **Average** | **[FILL]** | **[FILL]** | **[FILL]** |
+| 1 | 234 | 95 | 329 |
+| 2 | 231 | 93 | 324 |
+| 3 | 232 | 101 | 333 |
+| 4 | 262 | 113 | 375 |
+| 5 | 229 | 121 | 350 |
+| **Average** | **237.6** | **104.6** | **342.2** |
 
 ## Model Pricing
-Model: [exact model name from openrouter.ai/models]
-Input: $[X] per 1M tokens
-Output: $[Y] per 1M tokens
+Model: `openai/gpt-4o-mini`
+Input: $0.15 per 1M tokens
+Output: $0.60 per 1M tokens
 
 ## Cost Per Request
-([avg_prompt] × $[X]/1,000,000) + ([avg_completion] × $[Y]/1,000,000) = $[Z]
+(237.6 × $0.15 / 1,000,000) + (104.6 × $0.60 / 1,000,000) = $0.0000984 per request
 
 ## Monthly Projection
 Assumption: 100 users × 5 calls/day × 30 days = 15,000 requests/month
-Monthly cost: 15,000 × $[Z] = $[TOTAL]/month
+Monthly cost: 15,000 × $0.0000984 = $1.48 / month
 
 ## Rate Limit Cost Check
-[N] requests/hr × $[Z]/request = $[max] max per user per hour
+20 requests/hr × $0.0000984/request = $0.00197 max per user per hour (well below the $0.01 max budget per user/hour).

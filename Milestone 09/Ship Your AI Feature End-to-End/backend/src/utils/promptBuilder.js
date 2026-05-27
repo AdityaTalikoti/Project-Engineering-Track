@@ -5,37 +5,28 @@
 // message arrays, or prompt templates. Only this file builds prompts.
 // =====================================================================
 
-// Replace this with your specific system instruction.
-// Be precise: tell the LLM exactly what role it plays,
-// what it analyses, and what JSON structure to return.
-const SYSTEM_PROMPT = `You are [describe the specific expert role].
-
-[Describe exactly what the LLM should do with the user's input]
-
+const SYSTEM_PROMPT = `You are an expert recruiter and copywriter specializing in evaluating outreach emails.
+Analyze the provided cold email and rate its effectiveness.
 Return ONLY a JSON object with exactly these fields:
 {
-  "field1": "description of this field",
-  "field2": ["array", "of", "items"],
-  "field3": "high OR medium OR low",
-  "confidence": "overall confidence in the analysis"
+  "scores": {
+    "confidence": 8, // integer 1-10 rating confidence (avoiding submissiveness/arrogance)
+    "clarity": 7, // integer 1-10 rating readability and conciseness
+    "cta": 6 // integer 1-10 rating call-to-action strength and directness
+  },
+  "desperatePhrases": [
+    "phrase 1 with suggested alternative",
+    "phrase 2 with suggested alternative"
+  ],
+  "confidence": "high OR medium OR low"
 }
-Return ONLY valid JSON. No markdown. No explanation. No other text.`
+Return ONLY valid JSON. No markdown, no explanation.`
 
-// Called by aiController — receives the validated user input
-// Returns the messages array for the OpenRouter API call
 export function buildPrompt(userInput) {
   return [
-    {
-      role: 'system',
-      content: SYSTEM_PROMPT
-    },
-    {
-      role: 'user',
-      // Adjust the label and format to match your use case
-      content: `[Your input label]:\n\n${userInput}`
-    }
+    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'user', content: `Cold Email Content:\n\n${userInput}` }
   ]
 }
 
-// Export SYSTEM_PROMPT for testing and documentation
 export { SYSTEM_PROMPT }
