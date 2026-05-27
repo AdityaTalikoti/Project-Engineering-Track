@@ -19,8 +19,12 @@ const prompt = `give feedback on this note: ${content}`
 ### Rewritten Prompt
 
 ### Test Input Used
+```
+Mitosis is when cells divide. There are 4 phases. Prophase is when chromosomes condense. Metaphase the chromosomes line up. Anaphase they split. Telophase new cells form. DNA replicates before division starts. This is important for growth and repair.
+```
 
 ### Bad Prompt Output
+This note provides a clear and concise explanation of the process of mitosis, outlining the key phases and their functions. The information is easy to understand and the importance of DNA replication before division is highlighted effectively. However, it could be improved by elaborating on why mitosis is important for growth and repair, providing more context or examples to enhance the reader's understanding. Overall, it is a well-written and informative note.
 
 ### Good Prompt Output
 
@@ -45,8 +49,12 @@ const prompt = `summarize this interview experience: ${text}`
 ### Rewritten Prompt
 
 ### Test Input Used
+```
+I interviewed at Google for a SWE intern role in March. The interview had 3 rounds. First was a screening call, then two technical rounds. They asked me about arrays and dynamic programming. I solved the first problem easily but struggled with the DP one. I was given an offer but turned it down due to relocation. The interviewers were nice and gave good feedback about my problem-solving approach.
+```
 
 ### Bad Prompt Output
+The candidate interviewed at Google for a SWE intern role in March, going through 3 rounds - a screening call and two technical rounds. They were asked about arrays and dynamic programming, finding the first problem easy but struggling with the DP one. Despite receiving an offer, the candidate turned it down due to relocation. The interviewers were friendly and provided helpful feedback on their problem-solving approach.
 
 ### Good Prompt Output
 
@@ -71,8 +79,40 @@ const prompt = `why is there a bug: ${error_message}`
 ### Rewritten Prompt
 
 ### Test Input Used
+```
+TypeError: Cannot read properties of undefined (reading 'map')
+    at UserList.render (/app/components/UserList.jsx:34:22)
+    at processChild (/app/node_modules/react-dom/cjs/react-dom-server.node.development.js:3990:14)
+    at resolve (/app/node_modules/react-dom/cjs/react-dom-server.node.development.js:4054:5)
+    at ReactDOMServerRenderer.read (/app/node_modules/react-dom/cjs/react-dom-server.node.development.js:4402:29)
+```
 
 ### Bad Prompt Output
+This error occurs because you are trying to access the `map` function on a variable that is undefined. In this case, it is happening in the `UserList` component at line 34. 
+
+To fix this issue, you need to check if the variable you are trying to map over is defined before calling the map function. You can do this by adding a conditional check before mapping over the variable. 
+
+For example, you can modify your code like this:
+
+```jsx
+render() {
+    const { users } = this.props;
+
+    if (!users) {
+        return null;
+    }
+
+    return (
+        <div>
+            {users.map(user => (
+                <div key={user.id}>{user.name}</div>
+            ))}
+        </div>
+    );
+}
+```
+
+By adding the conditional check `if (!users)`, you are ensuring that the `map` function is only called when `users` is not undefined, avoiding the TypeError.
 
 ### Good Prompt Output
 
