@@ -6,6 +6,9 @@ This repository contains the first version of the internal API, which provides a
 
 ## 🚀 Getting Started
 
+### Live Deployment
+- **URL**: [https://corpflow-api-demo.onrender.com](https://corpflow-api-demo.onrender.com)
+
 ### 1. Prerequisites
 - Node.js (v18 or higher)
 - PostgreSQL (v14 or higher)
