@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeVault | Your Personal Cookbook</title>
+    <meta name="description" content="A personal recipe tracker to save your favorite culinary inspirations and never lose a recipe again.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <h1>Recipe<span>Vault</span></h1>
+                <p>Don't lose your flavor.</p>
+            </div>
+            <button id="add-btn" class="btn-primary">Add New Recipe</button>
+        </header>
+
+        <main>
+            <div id="loading-state" class="state-container hidden">
+                <div class="spinner"></div>
+                <p>Fetching your recipes...</p>
+            </div>
+
+            <div id="error-state" class="state-container hidden">
+                <p class="error-msg">Failed to connect to the kitchen. Please try again.</p>
+                <button onclick="fetchRecipes()" class="btn-secondary">Retry</button>
+            </div>
+
+            <div id="empty-state" class="state-container hidden">
+                <p>Your vault is empty. Time to start cooking!</p>
+            </div>
+
+            <div id="recipe-grid" class="recipe-grid">
+                <!-- Recipes will be injected here -->
+            </div>
+        </main>
+
+        <!-- Modal for Add/Edit -->
+        <div id="modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">New Recipe</h2>
+                    <button id="close-modal" class="close-btn">&times;</button>
+                </div>
+                <form id="recipe-form">
+                    <input type="hidden" id="recipe-id">
+                    <div class="form-group">
+                        <label for="title">Recipe Title</label>
+                        <input type="text" id="title" placeholder="e.g. Grandma's Pasta" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients</label>
+                        <textarea id="ingredients" placeholder="List your ingredients..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Instructions</label>
+                        <textarea id="instructions" placeholder="How do we make it?" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="source_url">Source URL (Optional)</label>
+                        <input type="url" id="source_url" placeholder="https://...">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="save-btn" class="btn-primary">Save Recipe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
