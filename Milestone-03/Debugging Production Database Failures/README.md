@@ -4,6 +4,9 @@ Welcome to OrderFlow! This is a starter codebase designed to help you practice d
 
 ## Getting Started
 
+### Live Deployment
+**URL**: [https://orderflow-demo-db-fixes.onrender.com](https://orderflow-demo-db-fixes.onrender.com)
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v16.x or newer)
